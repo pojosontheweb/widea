@@ -29,6 +29,9 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class WokoToolWindow {
 
@@ -67,34 +70,61 @@ public class WokoToolWindow {
                 });
         textFieldFilter.addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent keyEvent) {
+            public void keyReleased(KeyEvent keyEvent) {
                 int kc = keyEvent.getKeyCode();
-                switch(kc) {
-                    case KeyEvent.VK_UP : {
-                        RowSorter<TableModel> rowSorter = (RowSorter<TableModel>) table1.getRowSorter();
-                        int viewRowCount = rowSorter.getViewRowCount();
-                        int selectedRow = table1.getSelectedRow();
-                        if (selectedRow==0) {
-                            selectedRow = viewRowCount - 1;
-                        } else {
-                            selectedRow--;
+                if (keyEvent.isControlDown()) {
+                    // sorting shortcuts
+                    switch (kc) {
+                        case KeyEvent.VK_N: {
+                            // sort by facet name
+                            sortColumn(1);
+                            break;
                         }
-                        table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-                        break;
-                    }
-                    case KeyEvent.VK_DOWN: {
-                        int selectedRow = table1.getSelectedRow();
-                        int rowCount = table1.getRowSorter().getViewRowCount();
-                        if (selectedRow==rowCount-1) {
-                            selectedRow = 0;
-                        } else {
-                            selectedRow++;
+                        case KeyEvent.VK_P: {
+                            // sort by profile
+                            sortColumn(2);
+                            break;
                         }
-                        table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
-                        break;
+                        case KeyEvent.VK_T: {
+                            // sort by target type
+                            sortColumn(3);
+                            break;
+                        }
+                        case KeyEvent.VK_F: {
+                            // sort by facet class
+                            sortColumn(4);
+                            break;
+                        }
                     }
-                    case KeyEvent.VK_ENTER: {
-                        openInEditor();
+
+                } else {
+                    switch(kc) {
+                        case KeyEvent.VK_UP : {
+                            RowSorter<TableModel> rowSorter = (RowSorter<TableModel>) table1.getRowSorter();
+                            int viewRowCount = rowSorter.getViewRowCount();
+                            int selectedRow = table1.getSelectedRow();
+                            if (selectedRow==0) {
+                                selectedRow = viewRowCount - 1;
+                            } else {
+                                selectedRow--;
+                            }
+                            table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                            break;
+                        }
+                        case KeyEvent.VK_DOWN: {
+                            int selectedRow = table1.getSelectedRow();
+                            int rowCount = table1.getRowSorter().getViewRowCount();
+                            if (selectedRow==rowCount-1) {
+                                selectedRow = 0;
+                            } else {
+                                selectedRow++;
+                            }
+                            table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                            break;
+                        }
+                        case KeyEvent.VK_ENTER: {
+                            openInEditor();
+                        }
                     }
                 }
             }
@@ -124,12 +154,34 @@ public class WokoToolWindow {
         });
     }
 
+    private void sortColumn(int index) {
+        boolean sortKeyPresent = false;
+        DefaultRowSorter rs = (DefaultRowSorter)table1.getRowSorter();
+        for (Object sk : rs.getSortKeys()) {
+            RowSorter.SortKey sortKey = (RowSorter.SortKey)sk;
+            if (sortKey.getColumn()==index) {
+                // sort key already present
+                sortKeyPresent = true;
+            }
+        }
+        if (!sortKeyPresent) {
+            List<RowSorter.SortKey> keys = new ArrayList<RowSorter.SortKey>();
+            keys.add(new RowSorter.SortKey(index, SortOrder.ASCENDING));
+            rs.setSortKeys(keys);
+        } else {
+            rs.toggleSortOrder(index);
+        }
+    }
+
     private void openInEditor() {
-        int row = table1.convertRowIndexToModel(table1.getSelectedRow());
-        FacetDescriptorTableModel model = (FacetDescriptorTableModel) table1.getModel();
-        WideaFacetDescriptor fd = model.getFacetDescriptorAt(row);
-        if (fd!=null) {
-            getWpc().openClassInEditor(fd.getFacetClassName());
+        int selectedRow = table1.getSelectedRow();
+        if (selectedRow!=-1) {
+            int row = table1.convertRowIndexToModel(selectedRow);
+            FacetDescriptorTableModel model = (FacetDescriptorTableModel) table1.getModel();
+            WideaFacetDescriptor fd = model.getFacetDescriptorAt(row);
+            if (fd!=null) {
+                getWpc().openClassInEditor(fd.getFacetClassName());
+            }
         }
     }
 
