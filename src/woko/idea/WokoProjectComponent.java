@@ -158,13 +158,13 @@ public class WokoProjectComponent implements ProjectComponent {
         if (baseDir!=null) {
             // grab packages from web.xml
             VirtualFile f = baseDir.findFileByRelativePath("src/main/webapp/WEB-INF/web.xml");
+            List<String> pkgsFromConfig = new ArrayList<String>();
             if (f!=null) {
                 PsiFile file = PsiManager.getInstance(project).findFile(f);
                 if (file != null && file instanceof XmlFile) {
                     XmlFile xmlFile = (XmlFile)file;
                     XmlDocument doc = xmlFile.getDocument();
                     XmlTag[] tags = doc.getRootTag().getSubTags();
-                    List<String> pkgsFromConfig = new ArrayList<String>();
                     for (XmlTag tag : tags) {
                         if (tag.getName().equals("context-param")) {
                             String pName = tag.getSubTagText("param-name");
@@ -176,20 +176,21 @@ public class WokoProjectComponent implements ProjectComponent {
                             }
                         }
                     }
-                    // add default Woko packages
-                    pkgsFromConfig.add("facets");
-                    pkgsFromConfig.add("woko.facets.builtin");
-                    // scan
-                    List<WideaFacetDescriptor> descriptors = new ArrayList<WideaFacetDescriptor>();
-                    Map<WideaFacetDescriptor,Long> refStamps = new HashMap<WideaFacetDescriptor,Long>();
-                    Map<String,WideaFacetDescriptor> filesDescriptors = new HashMap<String, WideaFacetDescriptor>();
-                    scanForFacets(pkgsFromConfig, descriptors, filesDescriptors, refStamps);
-                    // update fields
-                    facetDescriptors = descriptors;
-                    filesAndDescriptors = filesDescriptors;
-                    modificationStamps = refStamps;
                 }
             }
+            // add default Woko packages
+            pkgsFromConfig.add("facets");
+            pkgsFromConfig.add("woko.facets.builtin");
+            // scan
+            List<WideaFacetDescriptor> descriptors = new ArrayList<WideaFacetDescriptor>();
+            Map<WideaFacetDescriptor,Long> refStamps = new HashMap<WideaFacetDescriptor,Long>();
+            Map<String,WideaFacetDescriptor> filesDescriptors = new HashMap<String, WideaFacetDescriptor>();
+            scanForFacets(pkgsFromConfig, descriptors, filesDescriptors, refStamps);
+            // update fields
+            facetDescriptors = descriptors;
+            filesAndDescriptors = filesDescriptors;
+            modificationStamps = refStamps;
+
         } else {
             facetDescriptors = Collections.emptyList();
             filesAndDescriptors = Collections.emptyMap();
