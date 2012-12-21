@@ -25,6 +25,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
@@ -64,6 +65,37 @@ public class WokoToolWindow {
                         filter();
                     }
                 });
+        textFieldFilter.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent keyEvent) {
+                int kc = keyEvent.getKeyCode();
+                switch(kc) {
+                    case KeyEvent.VK_UP : {
+                        RowSorter<TableModel> rowSorter = (RowSorter<TableModel>) table1.getRowSorter();
+                        int viewRowCount = rowSorter.getViewRowCount();
+                        int selectedRow = table1.getSelectedRow();
+                        if (selectedRow==0) {
+                            selectedRow = viewRowCount - 1;
+                        } else {
+                            selectedRow--;
+                        }
+                        table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                        break;
+                    }
+                    case KeyEvent.VK_DOWN: {
+                        int selectedRow = table1.getSelectedRow();
+                        int rowCount = table1.getRowSorter().getViewRowCount();
+                        if (selectedRow==rowCount-1) {
+                            selectedRow = 0;
+                        } else {
+                            selectedRow++;
+                        }
+                        table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                        break;
+                    }
+                }
+            }
+        });
         table1.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
@@ -140,6 +172,8 @@ public class WokoToolWindow {
         // do we enable push ?
         WokoProjectComponent w = project.getComponent(WokoProjectComponent.class);
         pushButton.setEnabled(w.hasPushableFacets());
+        // focus the search field
+        textFieldFilter.requestFocus();
     }
 
     public static abstract class FilterCallback {
