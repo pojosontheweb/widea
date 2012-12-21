@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8699cdbe-fdaa-4170-b743-4eced9b5a617" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java" afterPath="$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/plugin.xml" afterPath="$PROJECT_DIR$/META-INF/plugin.xml" />
     </list>
     <ignored path="widea.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -104,10 +103,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="WokoProjectComponent.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="WokoProjectComponent.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="180" column="0" selection-start="6701" selection-end="6701" vertical-scroll-proportion="0.3328877">
+            <state line="185" column="111" selection-start="7047" selection-end="7047" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#7123#7153#0" expanded="true" />
                 <element signature="e#20120#20148#0" expanded="true" />
@@ -116,10 +115,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="plugin.xml" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="plugin.xml" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="113" selection-start="863" selection-end="863" vertical-scroll-proportion="0.0">
+            <state line="31" column="43" selection-start="1138" selection-end="1138" vertical-scroll-proportion="0.59090906">
               <folding />
             </state>
           </provider>
@@ -168,8 +167,8 @@
         <option value="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.form" />
         <option value="$PROJECT_DIR$/src/woko/idea/OpenWokoToolWindow.java" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java" />
-        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java" />
+        <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
       </list>
     </option>
   </component>
@@ -441,7 +440,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="22" width="2560" height="1414" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293556" sideWeight="0.59969085" order="3" side_tool="false" content_ui="tabs" />
@@ -456,7 +455,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26199496" sideWeight="0.21957237" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26173428" sideWeight="0.59969085" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26173428" sideWeight="0.59969085" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30932525" sideWeight="0.99522674" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293556" sideWeight="0.59969085" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -609,20 +608,20 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="113" selection-start="863" selection-end="863" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="180" column="0" selection-start="6701" selection-end="6701" vertical-scroll-proportion="0.3328877">
+        <state line="185" column="111" selection-start="7047" selection-end="7047" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#7123#7153#0" expanded="true" />
             <element signature="e#20120#20148#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="31" column="43" selection-start="1138" selection-end="1138" vertical-scroll-proportion="0.59090906">
+          <folding />
         </state>
       </provider>
     </entry>
