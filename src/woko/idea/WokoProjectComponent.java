@@ -21,16 +21,17 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
 import com.intellij.openapi.ui.popup.Balloon;
 import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.*;
-import com.intellij.openapi.wm.StatusBar;
-import com.intellij.openapi.wm.ToolWindowManager;
-import com.intellij.openapi.wm.WindowManager;
+import com.intellij.openapi.wm.*;
 import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiImmediateClassType;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.xml.XmlDocument;
 import com.intellij.psi.xml.XmlFile;
 import com.intellij.psi.xml.XmlTag;
+import com.intellij.ui.content.Content;
+import com.intellij.ui.content.ContentFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.lang.psi.GrReferenceElement;
 import org.jetbrains.plugins.groovy.lang.psi.api.GroovyResolveResult;
@@ -39,11 +40,14 @@ import woko.tooling.utils.AppUtils;
 import woko.tooling.utils.Logger;
 import woko.tooling.utils.PomHelper;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.StringWriter;
 import java.util.*;
 
 public class WokoProjectComponent implements ProjectComponent {
+
+    public static final Icon WOKO_ICON = IconLoader.findIcon("/woko/idea/woko.png");
 
     private final Project project;
     private JavaPsiFacade psiFacade;
@@ -96,7 +100,22 @@ public class WokoProjectComponent implements ProjectComponent {
         return toolWindow;
     }
 
+    private void registerWokoToolWindow() {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindow tw = toolWindowManager.registerToolWindow("Woko", true, ToolWindowAnchor.BOTTOM);
+        WokoProjectComponent wpc = project.getComponent(WokoProjectComponent.class);
+        WokoToolWindow wtw = wpc.getToolWindow();
+        ContentFactory contentFactory = ContentFactory.SERVICE.getInstance();
+        Content content = contentFactory.createContent(wtw.getMainPanel(), "", false);
+        tw.getContentManager().addContent(content);
+        tw.setIcon(WOKO_ICON);
+    }
+
     public void projectOpened() {
+
+        // register the tool window
+        registerWokoToolWindow();
+
         psiFacade = JavaPsiFacade.getInstance(project);
         projectScope = GlobalSearchScope.projectScope(project);
         // register project file observer
@@ -111,6 +130,11 @@ public class WokoProjectComponent implements ProjectComponent {
         facetDescriptors = Collections.emptyList();
         VirtualFileSystem vfs = project.getBaseDir().getFileSystem();
         vfs.removeVirtualFileListener(vfsListener);
+
+        // unregister the tool window
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        toolWindowManager.unregisterToolWindow("Woko");
+
     }
 
     public boolean openClassInEditor(String fqcn) {

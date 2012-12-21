@@ -41,7 +41,4 @@
       </action>
   </actions>
 
-  <extensions defaultExtensionNs="com.intellij">
-      <facetType id="WokoFacet" implementation="woko.idea.WokoFacetType"/>
-  </extensions>
 </idea-plugin>
