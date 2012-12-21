@@ -35,6 +35,10 @@
   </project-components>
 
   <actions>
+      <action id="OpenWokoToolWindow" class="woko.idea.OpenWokoToolWindow" text="Woko" icon="/woko/idea/woko.png">
+          <add-to-group group-id="ViewMenu" anchor="first"/>
+          <keyboard-shortcut keymap="$default" first-keystroke="meta W"/>
+      </action>
   </actions>
 
   <extensions defaultExtensionNs="com.intellij">
