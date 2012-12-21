@@ -39,11 +39,15 @@ public class FacetTypeCellRenderer extends FacetCellRenderer {
     protected void setDisplayValue(JTable table, Object value, boolean selected, boolean hasFocus, int row, int column) {
         setValue(null);
         FdType type = (FdType)value;
-        switch(type) {
-            case Compiled   : setIcon(ICON_COMPILED); break;
-            case Groovy     : setIcon(ICON_GROOVY); break;
-            case Java       : setIcon(ICON_JAVA); break;
-            default         : setIcon(null); break;
+        if (type!=null) {
+            switch(type) {
+                case Compiled   : setIcon(ICON_COMPILED); break;
+                case Groovy     : setIcon(ICON_GROOVY); break;
+                case Java       : setIcon(ICON_JAVA); break;
+                default         : setIcon(null); break;
+            }
+        } else {
+            setIcon(null);
         }
     }
 }

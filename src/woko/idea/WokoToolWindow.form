@@ -68,7 +68,7 @@
                 <constraints/>
                 <properties>
                   <hideActionText value="true"/>
-                  <icon value="vcs/refresh.png"/>
+                  <icon value="woko/idea/refresh.png"/>
                   <text value=""/>
                   <toolTipText value="(re)load the facets available to your app"/>
                 </properties>
