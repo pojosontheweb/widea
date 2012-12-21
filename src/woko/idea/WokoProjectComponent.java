@@ -370,7 +370,11 @@ public class WokoProjectComponent implements ProjectComponent {
     }
 
     public PsiClass getPsiClass(String fqcn) {
-        return psiFacade.findClass(fqcn, projectScope);
+        try {
+            return psiFacade.findClass(fqcn, projectScope);
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     public PsiFile getPsiFile(String fqcn) {
