@@ -93,6 +93,9 @@ public class WokoToolWindow {
                         table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
                         break;
                     }
+                    case KeyEvent.VK_ENTER: {
+                        openInEditor();
+                    }
                 }
             }
         });
@@ -100,10 +103,7 @@ public class WokoToolWindow {
             public void mouseClicked(MouseEvent mouseEvent) {
                 if (mouseEvent.getClickCount() == 2) {
                     // dbl-clicked : get selected row
-                    int row = table1.convertRowIndexToModel(table1.getSelectedRow());
-                    FacetDescriptorTableModel model = (FacetDescriptorTableModel) table1.getModel();
-                    WideaFacetDescriptor fd = model.getFacetDescriptorAt(row);
-                    getWpc().openClassInEditor(fd.getFacetClassName());
+                    openInEditor();
                 }
             }
         });
@@ -122,6 +122,15 @@ public class WokoToolWindow {
                 getWpc().openPushDialog();
             }
         });
+    }
+
+    private void openInEditor() {
+        int row = table1.convertRowIndexToModel(table1.getSelectedRow());
+        FacetDescriptorTableModel model = (FacetDescriptorTableModel) table1.getModel();
+        WideaFacetDescriptor fd = model.getFacetDescriptorAt(row);
+        if (fd!=null) {
+            getWpc().openClassInEditor(fd.getFacetClassName());
+        }
     }
 
     private WokoProjectComponent getWpc() {
