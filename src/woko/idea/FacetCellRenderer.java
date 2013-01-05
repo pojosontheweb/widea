@@ -40,20 +40,8 @@ public class FacetCellRenderer extends DefaultTableCellRenderer {
                             boolean isSelected, boolean hasFocus,
                             int row, int column) {
 
-        FacetDescriptorTableModel model = (FacetDescriptorTableModel)table.getModel();
-        WideaFacetDescriptor fd = model.getFacetDescriptorAt(table.getRowSorter().convertRowIndexToModel(row));
-        if (fd!=null) {
-            // is the class a project class ?
-            if (fd.getType().equals(FdType.Compiled)) {
-                setBackground(new Color(230,230,230));
-            } else {
-                setBackground(Color.white);
-            }
-        }
-
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         setDisplayValue(table, value, isSelected, hasFocus, row, column);
-        setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.lightGray));
 
         // check if the file has changed since last refresh
 //        if (wpc().isModifiedSinceLastRefresh(fd)) {

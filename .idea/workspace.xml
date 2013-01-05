@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8699cdbe-fdaa-4170-b743-4eced9b5a617" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java" afterPath="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java" afterPath="$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java" />
     </list>
     <ignored path="widea.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -74,10 +73,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="WokoToolWindow.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="WokoToolWindow.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="122" column="0" selection-start="4647" selection-end="4647" vertical-scroll-proportion="0.51760566">
+            <state line="126" column="28" selection-start="4869" selection-end="4869" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#5369#5529#0" expanded="true" />
                 <element signature="e#5518#5519#0" expanded="true" />
@@ -86,6 +85,15 @@
                 <element signature="e#5754#5910#0" expanded="true" />
                 <element signature="e#5899#5900#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FacetCellRenderer.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="41" column="0" selection-start="1310" selection-end="1310" vertical-scroll-proportion="0.5340557">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -165,12 +173,12 @@
         <option value="$PROJECT_DIR$/src/woko/idea/FacetTypeCellRenderer.java" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoFacetConfiguration.java" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoFacet.java" />
-        <option value="$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.form" />
         <option value="$PROJECT_DIR$/src/woko/idea/OpenWokoToolWindow.java" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoProjectComponent.java" />
         <option value="$PROJECT_DIR$/META-INF/plugin.xml" />
         <option value="$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java" />
+        <option value="$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java" />
       </list>
     </option>
   </component>
@@ -225,6 +233,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="widea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="widea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="widea" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="idea" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -394,17 +420,18 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293556" sideWeight="0.59969085" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.40030912" sideWeight="0.4977827" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4001721" sideWeight="0.4977827" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39962825" sideWeight="0.49833703" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Woko" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Woko" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3281787" sideWeight="0.4977827" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.26199496" sideWeight="0.21957237" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22447762" sideWeight="0.9948718" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.30932525" sideWeight="0.99522674" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22447762" sideWeight="0.5998279" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3089501" sideWeight="0.99522674" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3293556" sideWeight="0.59969085" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Phing Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -417,7 +444,6 @@
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.29057187" sideWeight="0.99937266" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3287037" sideWeight="0.4977827" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -484,13 +510,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/META-INF/plugin.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="31" column="0" selection-start="1121" selection-end="1121" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/woko/idea/OpenWokoToolWindow.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="21" column="70" selection-start="960" selection-end="960" vertical-scroll-proportion="0.0">
@@ -581,7 +600,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/woko/idea/WokoToolWindow.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="122" column="0" selection-start="4647" selection-end="4647" vertical-scroll-proportion="0.51760566">
+        <state line="126" column="28" selection-start="4869" selection-end="4869" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#5369#5529#0" expanded="true" />
             <element signature="e#5518#5519#0" expanded="true" />
@@ -590,6 +609,13 @@
             <element signature="e#5754#5910#0" expanded="true" />
             <element signature="e#5899#5900#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/woko/idea/FacetCellRenderer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="41" column="0" selection-start="1310" selection-end="1310" vertical-scroll-proportion="0.5340557">
+          <folding />
         </state>
       </provider>
     </entry>
