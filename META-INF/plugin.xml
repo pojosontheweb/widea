@@ -17,7 +17,7 @@
 <idea-plugin version="2">
   <name>Woko Plugin</name>
   <description>Plugin for the Woko framework</description>
-  <version>1.1</version>
+  <version>1.2</version>
     <vendor logo="src/woko/idea/woko.png" url="http://www.pojosontheweb.com">POJOs on the Web</vendor>
   <idea-version since-build="8000"/>
 
