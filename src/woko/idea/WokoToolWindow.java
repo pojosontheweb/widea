@@ -108,7 +108,9 @@ public class WokoToolWindow {
                             } else {
                                 selectedRow--;
                             }
-                            table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                            if (selectedRow>0) {
+                                table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
+                            }
                             break;
                         }
                         case KeyEvent.VK_DOWN: {
