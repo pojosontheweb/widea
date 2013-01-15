@@ -17,6 +17,10 @@
 package woko.idea;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.MessageType;
+import com.intellij.openapi.ui.popup.Balloon;
+import com.intellij.openapi.ui.popup.JBPopupFactory;
+import com.intellij.ui.awt.RelativePoint;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -99,17 +103,17 @@ public class WokoToolWindow {
                     }
 
                 } else {
-                    switch(kc) {
-                        case KeyEvent.VK_UP : {
+                    switch (kc) {
+                        case KeyEvent.VK_UP: {
                             RowSorter<TableModel> rowSorter = (RowSorter<TableModel>) table1.getRowSorter();
                             int viewRowCount = rowSorter.getViewRowCount();
                             int selectedRow = table1.getSelectedRow();
-                            if (selectedRow==0) {
+                            if (selectedRow == 0) {
                                 selectedRow = viewRowCount - 1;
                             } else {
                                 selectedRow--;
                             }
-                            if (selectedRow>0) {
+                            if (selectedRow > 0) {
                                 table1.getSelectionModel().setSelectionInterval(selectedRow, selectedRow);
                             }
                             break;
@@ -117,7 +121,7 @@ public class WokoToolWindow {
                         case KeyEvent.VK_DOWN: {
                             int selectedRow = table1.getSelectedRow();
                             int rowCount = table1.getRowSorter().getViewRowCount();
-                            if (selectedRow==rowCount-1) {
+                            if (selectedRow == rowCount - 1) {
                                 selectedRow = 0;
                             } else {
                                 selectedRow++;
@@ -148,6 +152,12 @@ public class WokoToolWindow {
         includeLibsCheckBox.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent changeEvent) {
                 filter();
+            }
+        });
+        textFieldPackages.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                getWpc().refresh();
             }
         });
     }
@@ -286,6 +296,15 @@ public class WokoToolWindow {
 
     public String getFacetPackages() {
         return textFieldPackages.getText();
+    }
+
+    public void balloonOnPackagesTextField(String htmlText) {
+        JBPopupFactory.getInstance()
+                        .createHtmlTextBalloonBuilder(htmlText, MessageType.WARNING, null)
+                        .setFadeoutTime(7500)
+                        .createBalloon()
+                        .show(RelativePoint.getCenterOf(textFieldPackages),
+                                Balloon.Position.above);
     }
 
 }

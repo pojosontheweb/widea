@@ -16,7 +16,6 @@
 
 package woko.idea;
 
-import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
@@ -35,13 +34,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.plugins.groovy.lang.psi.GrReferenceElement;
 import org.jetbrains.plugins.groovy.lang.psi.api.GroovyResolveResult;
 import org.jetbrains.plugins.groovy.lang.psi.api.statements.expressions.GrReferenceExpression;
-import woko.tooling.utils.AppUtils;
-import woko.tooling.utils.Logger;
-import woko.tooling.utils.PomHelper;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.StringWriter;
 import java.util.*;
 
 public class WokoProjectComponent implements ProjectComponent {
@@ -52,10 +46,8 @@ public class WokoProjectComponent implements ProjectComponent {
     private JavaPsiFacade psiFacade;
     private GlobalSearchScope projectScope;
     private List<WideaFacetDescriptor> facetDescriptors = Collections.emptyList();
-    private Map<WideaFacetDescriptor,Long> modificationStamps = Collections.emptyMap();
 
     private WokoToolWindow toolWindow = new WokoToolWindow();
-    private PushServerInfoDialog pushDialog;
     private List<String> facetPackages = null;
 
     public WokoProjectComponent(Project project) {
@@ -71,15 +63,6 @@ public class WokoProjectComponent implements ProjectComponent {
     @NotNull
     public String getComponentName() {
         return "WokoProjectComponent";
-    }
-
-    public boolean hasPushableFacets() {
-        for (WideaFacetDescriptor fd : facetDescriptors) {
-            if (isPushable(fd)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean isGroovy(PsiClass psiClass) {
@@ -176,14 +159,14 @@ public class WokoProjectComponent implements ProjectComponent {
                         }
                     }
                 }
-                boolean pkgsFoundInWebXml = pkgsFromConfig.size() > 0;
-                if (pkgsFoundInWebXml) {
-                    // add default Woko packages
-                    pkgsFromConfig.add("facets");
-                    pkgsFromConfig.add("woko.facets.builtin");
-                } else {
-                    pkgsFromConfig.add("");
+                if (pkgsFromConfig.size() == 0) {
+                    toolWindow.balloonOnPackagesTextField("No packages found in web.xml !<br/> This can " +
+                            " happen if you use a custom init, or <br/> if the project ain't even a Woko project !<br/>" +
+                            "Add your facet package(s) to the list and refresh...");
                 }
+                // add default Woko packages
+                pkgsFromConfig.add("facets");
+                pkgsFromConfig.add("woko.facets.builtin");
                 facetPackages = pkgsFromConfig;
             } else {
                 // facet packages have been initialized : we need to
@@ -199,11 +182,9 @@ public class WokoProjectComponent implements ProjectComponent {
 
             // update fields
             facetDescriptors = descriptors;
-            modificationStamps = refStamps;
 
         } else {
             facetDescriptors = Collections.emptyList();
-            modificationStamps = Collections.emptyMap();
         }
         // fire refresh for the tool window's table model
         toolWindow.refreshContents();
@@ -248,11 +229,6 @@ public class WokoProjectComponent implements ProjectComponent {
                         if (vf!=null) {
                             String absolutePath = vf.getPath();
                             filesDescriptors.put(absolutePath, fd);
-                            Long stamp = modificationStamps.get(fd);
-                            if (stamp==null) {
-                                stamp = vf.getModificationStamp();
-                            }
-                            refStamps.put(fd, stamp);
                         }
                     }
                 }
@@ -420,15 +396,6 @@ public class WokoProjectComponent implements ProjectComponent {
         return null;
     }
 
-    public boolean isModifiedSinceLastRefresh(WideaFacetDescriptor fd) {
-        PsiFile f = getPsiFile(fd.getFacetClassName());
-        if (f==null) {
-            return false;
-        }
-        Long modStamp = modificationStamps.get(fd);
-        return modStamp == null || modStamp != f.getModificationStamp();
-    }
-
     public static List<String> extractPackagesList(String packagesStr) {
         String[] pkgNamesArr = packagesStr.
                 replace('\n', ',').
@@ -441,95 +408,6 @@ public class WokoProjectComponent implements ProjectComponent {
             }
         }
         return pkgNames;
-    }
-
-    public void openPushDialog() {
-        if (pushDialog==null) {
-            pushDialog = new PushServerInfoDialog();
-        }
-        PushFacetsDialogWrapper w = new PushFacetsDialogWrapper(project);
-        w.pack();
-        w.show();
-    }
-
-    private boolean isPushable(WideaFacetDescriptor fd) {
-        PsiClass psiClass = getPsiClass(fd.getFacetClassName());
-        return psiClass!=null
-                && isGroovy(psiClass)
-                && isModifiedSinceLastRefresh(fd);
-    }
-
-    public void toolWindowBalloon(MessageType messageType, String htmlMessage) {
-        ToolWindowManager.getInstance(project).notifyByBalloon("Woko", messageType, htmlMessage);
-    }
-
-    public boolean push(String url, String username, String password) {
-        StatusBar statusBar = WindowManager.getInstance()
-                        .getStatusBar(project);
-        statusBar.setInfo("Pushing facets to " + url + "...");
-
-        try {
-
-            // retrieve the facet sources from modified facets
-            List<String> facetSources = new ArrayList<String>();
-            List<WideaFacetDescriptor> pushedFacets = new ArrayList<WideaFacetDescriptor>();
-            for (WideaFacetDescriptor fd : facetDescriptors) {
-                if (isPushable(fd)) {
-                    String fqcn = fd.getFacetClassName();
-                    PsiClass psiClass = getPsiClass(fqcn);
-                    facetSources.add(psiClass.getContainingFile().getText());
-                    pushedFacets.add(fd);
-                }
-            }
-
-            if (pushedFacets.size()==0) {
-                toolWindowBalloon(MessageType.WARNING, "No facets pushed (no changes found in local facets)");
-                statusBar.setInfo("Nothing to push !");
-                return false;
-            }
-
-            // push all this !
-            PomHelper pomHelper = AppUtils.getPomHelper(new File(project.getBaseDir().getPath()));
-            StringWriter sw = new StringWriter();
-            Logger logger = new Logger(sw);
-            AppUtils.pushFacetSources(pomHelper, logger, url, username, password, facetSources);
-
-
-            StringBuilder pushMsg = new StringBuilder();
-            pushMsg.append("The following facets have ben pushed :")
-                    .append("<ul>");
-            List<String> pushedClasses = new ArrayList<String>();
-            Map<WideaFacetDescriptor,Long> modifStamps = new HashMap<WideaFacetDescriptor, Long>(modificationStamps);
-            for (WideaFacetDescriptor fd : pushedFacets) {
-                String fqcn = fd.getFacetClassName();
-                if (!pushedClasses.contains(fqcn)) {
-                    pushedClasses.add(fqcn);
-                    pushMsg.append("<li>")
-                            .append(fqcn)
-                            .append("</li>");
-                }
-
-                // update stamps for pushed classes
-                modifStamps.remove(fd);
-                PsiFile pf = getPsiFile(fqcn);
-                if (pf!=null) {
-                    modifStamps.put(fd, pf.getModificationStamp());
-                }
-            }
-            pushMsg.append("</ul>");
-            modificationStamps = modifStamps;
-
-            toolWindowBalloon(MessageType.INFO, pushMsg.toString());
-            statusBar.setInfo("Facets pushed to " + url);
-            return true;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            String message = "Could not push : " + e.getMessage();
-            statusBar.setInfo(message);
-            toolWindowBalloon(MessageType.ERROR, message);
-            return false;
-        }
     }
 
     public List<String> getFacetPackages() {

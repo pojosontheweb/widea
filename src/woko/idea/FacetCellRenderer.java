@@ -42,12 +42,6 @@ public class FacetCellRenderer extends DefaultTableCellRenderer {
 
         super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         setDisplayValue(table, value, isSelected, hasFocus, row, column);
-
-        // check if the file has changed since last refresh
-//        if (wpc().isModifiedSinceLastRefresh(fd)) {
-//            setFont(getFont().deriveFont(Font.BOLD));
-//        }
-
         return this;
     }
 
