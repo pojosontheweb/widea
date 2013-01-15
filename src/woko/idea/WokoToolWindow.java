@@ -31,6 +31,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class WokoToolWindow {
@@ -41,7 +42,7 @@ public class WokoToolWindow {
     private JTextField textFieldFilter;
     private JButton clearButton;
     private JCheckBox includeLibsCheckBox;
-    private JButton pushButton;
+    private JTextField textFieldPackages;
 
     private Project project;
 
@@ -149,11 +150,6 @@ public class WokoToolWindow {
                 filter();
             }
         });
-        pushButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent actionEvent) {
-                getWpc().openPushDialog();
-            }
-        });
     }
 
     private void sortColumn(int index) {
@@ -230,11 +226,20 @@ public class WokoToolWindow {
     }
 
     public void refreshContents() {
+        // packages textField
+        WokoProjectComponent wpc = project.getComponent(WokoProjectComponent.class);
+        List<String> facetPackages = wpc.getFacetPackages();
+        StringBuilder sb = new StringBuilder();
+        for (Iterator<String> facetPackageIt = facetPackages.iterator() ; facetPackageIt.hasNext() ; ) {
+            sb.append(facetPackageIt.next());
+            if (facetPackageIt.hasNext()) {
+                sb.append(", ");
+            }
+        }
+        textFieldPackages.setText(sb.toString());
+
         // refresh the table
         ((FacetDescriptorTableModel)table1.getModel()).fireTableDataChanged();
-        // do we enable push ?
-        WokoProjectComponent w = project.getComponent(WokoProjectComponent.class);
-        pushButton.setEnabled(w.hasPushableFacets());
         // focus the search field
         textFieldFilter.requestFocus();
     }
@@ -279,7 +284,9 @@ public class WokoToolWindow {
         return panel1;
     }
 
-
+    public String getFacetPackages() {
+        return textFieldPackages.getText();
+    }
 
 }
 

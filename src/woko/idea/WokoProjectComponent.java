@@ -16,11 +16,10 @@
 
 package woko.idea;
 
+import com.intellij.openapi.actionSystem.DataKeys;
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.MessageType;
-import com.intellij.openapi.ui.popup.Balloon;
-import com.intellij.openapi.ui.popup.JBPopupFactory;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.*;
 import com.intellij.openapi.wm.*;
@@ -53,12 +52,11 @@ public class WokoProjectComponent implements ProjectComponent {
     private JavaPsiFacade psiFacade;
     private GlobalSearchScope projectScope;
     private List<WideaFacetDescriptor> facetDescriptors = Collections.emptyList();
-    private Map<String,WideaFacetDescriptor> filesAndDescriptors = Collections.emptyMap();
-    private MyVfsListener vfsListener = new MyVfsListener();
     private Map<WideaFacetDescriptor,Long> modificationStamps = Collections.emptyMap();
 
     private WokoToolWindow toolWindow = new WokoToolWindow();
     private PushServerInfoDialog pushDialog;
+    private List<String> facetPackages = null;
 
     public WokoProjectComponent(Project project) {
         this.project = project;
@@ -88,13 +86,6 @@ public class WokoProjectComponent implements ProjectComponent {
         return psiClass != null && psiClass.getLanguage().getID().equals("Groovy");
     }
 
-    class MyVfsListener extends VirtualFileAdapter {
-        @Override
-        public void contentsChanged(VirtualFileEvent event) {
-            // TODO : expensive lookup, we might consider updating only the changed file !!!
-            refresh();
-        }
-    }
 
     public WokoToolWindow getToolWindow() {
         return toolWindow;
@@ -118,9 +109,6 @@ public class WokoProjectComponent implements ProjectComponent {
 
         psiFacade = JavaPsiFacade.getInstance(project);
         projectScope = GlobalSearchScope.projectScope(project);
-        // register project file observer
-        VirtualFileSystem vfs = project.getBaseDir().getFileSystem();
-        vfs.addVirtualFileListener(vfsListener);
         // init tool window
         toolWindow.init(project);
     }
@@ -128,8 +116,6 @@ public class WokoProjectComponent implements ProjectComponent {
     public void projectClosed() {
         // called when project is being closed
         facetDescriptors = Collections.emptyList();
-        VirtualFileSystem vfs = project.getBaseDir().getFileSystem();
-        vfs.removeVirtualFileListener(vfsListener);
 
         // unregister the tool window
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
@@ -153,47 +139,70 @@ public class WokoProjectComponent implements ProjectComponent {
         return facetDescriptors;
     }
 
+    private void setStatusBarMessage(final String msg) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
+                statusBar.setInfo(msg);
+            }
+        });
+    }
+
     public void refresh() {
+        setStatusBarMessage("Refreshing facets in the project...");
         VirtualFile baseDir = project.getBaseDir();
         if (baseDir!=null) {
-            // grab packages from web.xml
-            VirtualFile f = baseDir.findFileByRelativePath("src/main/webapp/WEB-INF/web.xml");
-            List<String> pkgsFromConfig = new ArrayList<String>();
-            if (f!=null) {
-                PsiFile file = PsiManager.getInstance(project).findFile(f);
-                if (file != null && file instanceof XmlFile) {
-                    XmlFile xmlFile = (XmlFile)file;
-                    XmlDocument doc = xmlFile.getDocument();
-                    XmlTag[] tags = doc.getRootTag().getSubTags();
-                    for (XmlTag tag : tags) {
-                        if (tag.getName().equals("context-param")) {
-                            String pName = tag.getSubTagText("param-name");
-                            if (pName!=null && pName.equals("Woko.Facet.Packages")) {
-                                String packagesStr = tag.getSubTagText("param-value");
-                                if (packagesStr!=null) {
-                                    pkgsFromConfig.addAll(extractPackagesList(packagesStr));
+            if (facetPackages == null) {
+                // grab packages from web.xml
+                VirtualFile f = baseDir.findFileByRelativePath("src/main/webapp/WEB-INF/web.xml");
+                List<String> pkgsFromConfig = new ArrayList<String>();
+                if (f!=null) {
+                    PsiFile file = PsiManager.getInstance(project).findFile(f);
+                    if (file != null && file instanceof XmlFile) {
+                        XmlFile xmlFile = (XmlFile)file;
+                        XmlDocument doc = xmlFile.getDocument();
+                        XmlTag[] tags = doc.getRootTag().getSubTags();
+                        for (XmlTag tag : tags) {
+                            if (tag.getName().equals("context-param")) {
+                                String pName = tag.getSubTagText("param-name");
+                                if (pName!=null && pName.equals("Woko.Facet.Packages")) {
+                                    String packagesStr = tag.getSubTagText("param-value");
+                                    if (packagesStr!=null) {
+                                        pkgsFromConfig.addAll(extractPackagesList(packagesStr));
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                boolean pkgsFoundInWebXml = pkgsFromConfig.size() > 0;
+                if (pkgsFoundInWebXml) {
+                    // add default Woko packages
+                    pkgsFromConfig.add("facets");
+                    pkgsFromConfig.add("woko.facets.builtin");
+                } else {
+                    pkgsFromConfig.add("");
+                }
+                facetPackages = pkgsFromConfig;
+            } else {
+                // facet packages have been initialized : we need to
+                // extract from the textField now !
+                facetPackages = extractPackagesList(toolWindow.getFacetPackages());
             }
-            // add default Woko packages
-            pkgsFromConfig.add("facets");
-            pkgsFromConfig.add("woko.facets.builtin");
+
             // scan
             List<WideaFacetDescriptor> descriptors = new ArrayList<WideaFacetDescriptor>();
             Map<WideaFacetDescriptor,Long> refStamps = new HashMap<WideaFacetDescriptor,Long>();
             Map<String,WideaFacetDescriptor> filesDescriptors = new HashMap<String, WideaFacetDescriptor>();
-            scanForFacets(pkgsFromConfig, descriptors, filesDescriptors, refStamps);
+            scanForFacets(facetPackages, descriptors, filesDescriptors, refStamps);
+
             // update fields
             facetDescriptors = descriptors;
-            filesAndDescriptors = filesDescriptors;
             modificationStamps = refStamps;
 
         } else {
             facetDescriptors = Collections.emptyList();
-            filesAndDescriptors = Collections.emptyMap();
             modificationStamps = Collections.emptyMap();
         }
         // fire refresh for the tool window's table model
@@ -207,11 +216,13 @@ public class WokoProjectComponent implements ProjectComponent {
             Map<WideaFacetDescriptor,Long> refStamps) {
         // scan configured package for classes annotated with @FacetKey[List]
         for (String pkgName : packageNamesFromConfig) {
+            setStatusBarMessage("Woko plugin scanning package : " + pkgName);
             PsiPackage psiPkg = psiFacade.findPackage(pkgName);
             if (psiPkg!=null) {
                 scanForFacetsRecursive(psiPkg, scannedDescriptors, filesDescriptors, refStamps);
             }
         }
+        setStatusBarMessage("Woko plugin found " + scannedDescriptors.size() + " facets");
     }
 
     private void scanForFacetsRecursive(
@@ -521,5 +532,8 @@ public class WokoProjectComponent implements ProjectComponent {
         }
     }
 
+    public List<String> getFacetPackages() {
+        return facetPackages;
+    }
 }
 
