@@ -43,7 +43,6 @@ public class WokoProjectComponent implements ProjectComponent {
     public static final Icon WOKO_ICON = IconLoader.findIcon("/woko/idea/woko.png");
 
     private final Project project;
-    private JavaPsiFacade psiFacade;
     private GlobalSearchScope projectScope;
     private List<WideaFacetDescriptor> facetDescriptors = Collections.emptyList();
 
@@ -85,12 +84,15 @@ public class WokoProjectComponent implements ProjectComponent {
         tw.setIcon(WOKO_ICON);
     }
 
+    private JavaPsiFacade getPsiFacade() {
+        return JavaPsiFacade.getInstance(project);
+    }
+
     public void projectOpened() {
 
         // register the tool window
         registerWokoToolWindow();
 
-        psiFacade = JavaPsiFacade.getInstance(project);
         projectScope = GlobalSearchScope.projectScope(project);
         // init tool window
         toolWindow.init(project);
@@ -198,7 +200,7 @@ public class WokoProjectComponent implements ProjectComponent {
         // scan configured package for classes annotated with @FacetKey[List]
         for (String pkgName : packageNamesFromConfig) {
             setStatusBarMessage("Woko plugin scanning package : " + pkgName);
-            PsiPackage psiPkg = psiFacade.findPackage(pkgName);
+            PsiPackage psiPkg = getPsiFacade().findPackage(pkgName);
             if (psiPkg!=null) {
                 scanForFacetsRecursive(psiPkg, scannedDescriptors, filesDescriptors, refStamps);
             }
@@ -382,7 +384,7 @@ public class WokoProjectComponent implements ProjectComponent {
 
     public PsiClass getPsiClass(String fqcn) {
         try {
-            return psiFacade.findClass(fqcn, projectScope);
+            return getPsiFacade().findClass(fqcn, projectScope);
         } catch(Exception e) {
             return null;
         }
